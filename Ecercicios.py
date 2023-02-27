@@ -18,4 +18,26 @@ if(len(str1) == len(str2) and (str1 == str2)):
 elif(len(str1) == len(str2)):
     print('Os textos tem o mesmo tamanho, porem são diferentes')
 else:
-    print('os textos são diferentes!')'''
+    print('os textos são diferentes!')
+
+
+#Exercicio03
+
+vogais = ['a','e','i','o','u']
+consoantes = []
+cont = 0
+
+texto = input("informe um texto: ")
+
+for letra in texto:
+    if (letra in vogais):
+        consoantes.append(letra)
+        cont = cont + 1
+
+print(f'As consoantes são: {consoantes} e num total de {cont}')'''
+
+
+
+
+
+
