@@ -34,16 +34,22 @@ for letra in texto:
         consoantes.append(letra)
         cont = cont + 1
 
-print(f'As consoantes são: {consoantes} e num total de {cont}')'''
+print(f'As consoantes são: {consoantes} e num total de {cont}')
 
 #Ercecicio 04
 
-tam = input('insira o tamanho do arquivo em MB: ')
-vel = input('insira a velocidade da sua internet em Mbps: ')
+tam = float(input('insira o tamanho do arquivo em MB: '))
+vel = float(input('insira a velocidade da sua internet em Mbps: '))
+
+tempo = float((tam/vel)*8)/60
+
+print(f'O tempo estimado em minutos é de {tempo:.2f}')'''
+
+#Exercicio 5
 
 
-
-
+turmas = int(input('Insira o numer de turmas: '))
+alunos = int(input('Insira quantidade de alunos'))
 
 
 
