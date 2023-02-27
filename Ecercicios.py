@@ -1,5 +1,5 @@
 
-'''#Exercício 01
+#Exercício 01
 
 nome = input('Escreva seu nome: ').upper()[::-1]
 
@@ -25,16 +25,18 @@ else:
 
 vogais = ['a','e','i','o','u']
 consoantes = []
-cont = 0
+vogaisCont = []
 
 texto = input("informe um texto: ")
 
 for letra in texto:
     if (letra in vogais):
+        vogaisCont.append(letra)
+    else:
         consoantes.append(letra)
-        cont = cont + 1
 
-print(f'As consoantes são: {consoantes} e num total de {cont}')
+print(f'As consoantes são: {consoantes} e num total de {len(consoantes)} o texto tem um total de {len(texto)} letras')
+
 
 #Ercecicio 04
 
@@ -43,13 +45,22 @@ vel = float(input('insira a velocidade da sua internet em Mbps: '))
 
 tempo = float((tam/vel)*8)/60
 
-print(f'O tempo estimado em minutos é de {tempo:.2f}')'''
+print(f'O tempo estimado em minutos é de {tempo:.2f}')
 
 #Exercicio 5
 
+media = 0
+alunoscont = 0
 
-turmas = int(input('Insira o numer de turmas: '))
-alunos = int(input('Insira quantidade de alunos'))
+turmas = int(input('Insira o numero de turmas: '))
 
+for i in range(turmas):
+    while True:
+        alunos = int(input(f'Insira quantidade de alunos tem a turma {i +1} '))
+        if alunos <= 40:
+            break
+    alunoscont = alunos + alunos
+    media = alunoscont / turmas
 
+print(f'Turmas {turmas} Alunos {alunoscont} e media de alunos são {int(media)} por turma')'''
 
