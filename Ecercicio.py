@@ -1,3 +1,1 @@
-nome = input('Escreva seu nome: ')
-
-print('nome')
+print ("lindo")
