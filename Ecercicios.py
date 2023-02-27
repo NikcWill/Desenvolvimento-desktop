@@ -36,6 +36,12 @@ for letra in texto:
 
 print(f'As consoantes são: {consoantes} e num total de {cont}')'''
 
+#Ercecicio 04
+
+tam = input('insira o tamanho do arquivo em MB: ')
+vel = input('insira a velocidade da sua internet em Mbps: ')
+
+
 
 
 
