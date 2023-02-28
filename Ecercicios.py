@@ -62,5 +62,5 @@ for i in range(turmas):
     alunoscont = alunos + alunos
     media = alunoscont / turmas
 
-print(f'Turmas {turmas} Alunos {alunoscont} e media de alunos são {int(media)} por turma')'''
+print(f'Turmas {turmas} Alunos {alunoscont} e media de alunos são {int(media)} por turma')
 
