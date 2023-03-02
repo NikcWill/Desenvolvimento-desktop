@@ -1,5 +1,5 @@
 
-'''#Exercício 01
+#Exercício 01
 
 nome = input('Escreva seu nome: ').upper()[::-1]
 
@@ -36,7 +36,7 @@ for letra in texto:
         consoantes.append(letra)
 
 print(f'As consoantes são: {consoantes} e num total de {len(consoantes)} o texto tem um total de {len(texto)} letras')
-'''
+
 
 #Ercecicio 04
 
@@ -48,7 +48,7 @@ tempo = float((tam/vel)*8)/60
 print(f'O tempo estimado em minutos é de {tempo:.2f}')
 
 #Exercicio 5
-'''
+
 media = 0
 alunoscont = 0
 
@@ -62,5 +62,5 @@ for i in range(turmas):
     alunoscont = alunos + alunos
     media = alunoscont / turmas
 
-print(f'Turmas {turmas} Alunos {alunoscont} e media de alunos são {int(media)} por turma')'''
+print(f'Turmas {turmas} Alunos {alunoscont} e media de alunos são {int(media)} por turma')
 
