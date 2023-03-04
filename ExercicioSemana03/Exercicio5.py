@@ -1,9 +1,9 @@
 
-import ExercicioSemana03.Exercicio4
+import Exercicio4
 
 controle = 0
 
-for numero2 in ExercicioSemana03.Exercicio4.list:
+for numero2 in Exercicio4.list:
     if numero2 < 1500 and numero2 % 5 == 0:
         if (95 < numero2 < 150):
             controle = numero2 + 1
