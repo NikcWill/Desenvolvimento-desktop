@@ -4,6 +4,9 @@ listaNomes = ["Ana", "João", "Maria", "Pedro", "Sofia"]
 lista = validador()
 
 
+arr = [1, 2, 3, 4 ['ana', 'joao', 'pedro', 'maria']]
+
+
 def montadorLista (lista1, lista2):
     novaLista = []
     for i in lista1:
