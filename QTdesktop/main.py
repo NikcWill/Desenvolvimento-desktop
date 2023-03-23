@@ -45,9 +45,9 @@ class MainWindow (QMainWindow):
 
     def calcular_metro_cubico(self):
         resultado =  str(
-            float(self.txt_largura.text()) *
-            float(self.txt_altura.text()) *
-            float(self.txt_profundidade.text())
+            float(self.txt_largura.text().replace(',', '.')) *
+            float(self.txt_altura.text().replace(',', '.')) *
+            float(self.txt_profundidade.text().replace(',', '.'))
         )
         self.lbl_resultado.setText(f'O volume cúbico é: {resultado}')
 
