@@ -3,8 +3,10 @@ import json
 from PySide6.QtWidgets import (QMainWindow, QBoxLayout, QLabel, QComboBox, QLineEdit, QPushButton, QWidget, QMessageBox,
                                QSizePolicy, QVBoxLayout)
 
-from CadastroCliente.model.cliente import Cliente
-from CadastroCliente.controller.cliente_dao import  DataBase
+from Desenvolvimento_desktop.Desenvolvimento_desktop.CadastroCliente.model.cliente import Cliente
+from Desenvolvimento_desktop.Desenvolvimento_desktop.CadastroCliente.controller.cliente_dao import DataBase
+from Desenvolvimento_desktop.Desenvolvimento_desktop.ExercicioSemana03.Exercicio4 import numero
+
 
 class MainWindow (QMainWindow):
     def __init__(self):
@@ -14,33 +16,33 @@ class MainWindow (QMainWindow):
 
         self.setWindowTitle('Cadastro de cliente')
 
-        self.lbl_sexo = QLabel()
-        self.lbl_cpf = QLabel()
+        self.lbl_sexo = QLabel('Sexo')
+        self.lbl_cpf = QLabel('CPF')
         self.txt_cpf = QLineEdit()
         self.txt_cpf.setInputMask('000.000.000-00')
-        self.lbl_nome = QLabel()
+        self.lbl_nome = QLabel('Nome')
         self.txt_nome = QLineEdit()
-        self.lbl_telefone_fixo = QLabel()
+        self.lbl_telefone_fixo = QLabel('Telefone Fixo')
         self.txt_telefone_fixo = QLineEdit()
         self.txt_telefone_fixo.setInputMask('(00)0000-0000')
-        self.lbl_telefone_celular = QLabel()
+        self.lbl_telefone_celular = QLabel('Telefone Celular')
         self.txt_telefone_celular = QLineEdit()
         self.txt_telefone_celular.setInputMask('(00)00000-0000')
         self.cb_sexo = QComboBox()
         self.cb_sexo.addItems(['não imformado', 'Masculino', 'Feminino'])
-        self.lbl_cep = QLabel()
+        self.lbl_cep = QLabel('CEP')
         self.txt_cep = QLineEdit()
-        self.lbl_logradouro = QLabel()
+        self.lbl_logradouro = QLabel('Logradouro')
         self.txt_logradouro = QLineEdit()
-        self.lbl_numero = QLabel()
+        self.lbl_numero = QLabel('Numero')
         self.txt_numero = QLineEdit()
-        self.lbl_bairro = QLabel()
+        self.lbl_bairro = QLabel('Bairro')
         self.txt_bairro = QLineEdit()
-        self.lbl_municipio = QLabel()
+        self.lbl_municipio = QLabel('Municipio')
         self.txt_municipio = QLineEdit()
-        self.lbl_complemento = QLabel()
+        self.lbl_complemento = QLabel('Complemento')
         self.txt_complemento = QLineEdit()
-        self.lbl_estado = QLabel()
+        self.lbl_estado = QLabel('Estado')
         self.txt_estado = QLineEdit()
         self.btn_salvar = QPushButton('Salvar')
         self.btn_limpar = QPushButton('Limpar')
@@ -75,9 +77,49 @@ class MainWindow (QMainWindow):
         layout.addWidget(self.txt_estado)
 
         self.container = QWidget()
-        self.container.setSizePolicy(QSizePolicy.Expanding)
+        self.container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setCentralWidget(self.container)
         self.container.setLayout(layout)
+
+        self.btn_remover.setVisible(False)
+        self.btn_salvar.clicked.connect(self.salvar_cliente)
+    def salvar_cliente(self):
+        db = DataBase()
+
+        cliente = Cliente(
+            cpf = self.txt_cpf.text(),
+            nome = self.txt_nome.text(),
+            telefone_fixo = self.txt_telefone_fixo.text(),
+            telefone_celular = self.txt_telefone_celular.text(),
+            sexo = self.cb_sexo.currentText(),
+            cep = self.txt_cep.text(),
+            logradouro=self.txt_logradouro.text(),
+            numero=self.txt_numero.text(),
+            complemento=self.txt_complemento.text(),
+            bairro=self.txt_bairro.text(),
+            municipio=self.txt_municipio.text(),
+            estado=self.txt_estado.text()
+        )
+        retorno = db.registrar_cliente(cliente)
+
+        if returno == 'ok':
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setWindowTitle('Cadastro Realizado ')
+            msg.setText('Cadastro realizado com sucesso')
+            msg.exec()
+        elif 'UNIQUE constraint failed: CLIENTE CPF' in retorno[0]:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle('Erro ao cadastrar')
+            msg.setText(f'O CPF {self.txt_cpf} já tem cadastro')
+            msg.exec()
+        else:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle('Erro ao cadastrar ')
+            msg.setText('Erro ao cadastrar verfique os dados inseridos')
+            msg.exec()
 
 
 

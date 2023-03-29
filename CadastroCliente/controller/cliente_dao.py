@@ -1,13 +1,13 @@
 import sqlite3
 
-from CadastroCliente.model import cliente
+from Desenvolvimento_desktop.Desenvolvimento_desktop.CadastroCliente.model.cliente import Cliente
 
 class DataBase:
-    def __init__(self, nome = 'system.db'):
+    def __init__(self, nome='system.db'):
         self.connection = None
         self.name = nome
 
-    def connection(self):
+    def connect(self):
         self.connection = sqlite3.connect(self.name)
 
     def close_connection(self):
@@ -17,10 +17,10 @@ class DataBase:
             print(e)
 
     def create_table_cliente(self):
-        self.connection()
+        self.connect()
         cursor = self.connection.cursor()
         cursor.execute(
-            """"
+            """
             CREATE TABLE IF NOT EXISTS CLIENTE(
             CPF TEXT,
             NOME TEXT,
@@ -56,7 +56,7 @@ class DataBase:
             self.connection.commit()
             return
         except sqlite3.Error as e:
-            print(e)
+            return e
         finally:
             self.close_connection()
 
@@ -85,7 +85,7 @@ class DataBase:
             self.close_connection()
 
 
-    def atualizar_cliente(self, cliente=Cliente):
+    def atualizar_cliente(self, cliente = Cliente):
         self.connect()
         try:
             cursor = self.connection.cursor()
