@@ -54,7 +54,7 @@ class DataBase:
         try:
             curso.execute(f""" INSERT INTO CLIENTE {campos_cliente} VALUES ({valores})""")
             self.connection.commit()
-            return
+            return 'ok'
         except sqlite3.Error as e:
             return e
         finally:

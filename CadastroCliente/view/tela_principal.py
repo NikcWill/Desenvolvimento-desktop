@@ -1,11 +1,11 @@
 import requests
 import json
-from PySide6.QtWidgets import (QMainWindow, QBoxLayout, QLabel, QComboBox, QLineEdit, QPushButton, QWidget, QMessageBox,
+from PySide6.QtWidgets import (QMainWindow, QLabel, QComboBox, QLineEdit, QPushButton, QWidget, QMessageBox,
                                QSizePolicy, QVBoxLayout)
 
 from Desenvolvimento_desktop.Desenvolvimento_desktop.CadastroCliente.model.cliente import Cliente
 from Desenvolvimento_desktop.Desenvolvimento_desktop.CadastroCliente.controller.cliente_dao import DataBase
-from Desenvolvimento_desktop.Desenvolvimento_desktop.ExercicioSemana03.Exercicio4 import numero
+
 
 
 class MainWindow (QMainWindow):
@@ -71,10 +71,12 @@ class MainWindow (QMainWindow):
         layout.addWidget(self.txt_bairro)
         layout.addWidget(self.lbl_municipio)
         layout.addWidget(self.txt_municipio)
-        layout.addWidget(self.lbl_cep)
-        layout.addWidget(self.txt_cep)
         layout.addWidget(self.lbl_estado)
         layout.addWidget(self.txt_estado)
+
+        layout.addWidget(self.btn_salvar)
+        layout.addWidget(self.btn_limpar)
+        layout.addWidget(self.btn_remover)
 
         self.container = QWidget()
         self.container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -102,13 +104,13 @@ class MainWindow (QMainWindow):
         )
         retorno = db.registrar_cliente(cliente)
 
-        if returno == 'ok':
+        if retorno == 'ok':
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
             msg.setWindowTitle('Cadastro Realizado ')
             msg.setText('Cadastro realizado com sucesso')
             msg.exec()
-        elif 'UNIQUE constraint failed: CLIENTE CPF' in retorno[0]:
+        elif 'UNIQUE constraint failed: ' in retorno[0]:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setWindowTitle('Erro ao cadastrar')
