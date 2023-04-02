@@ -3,8 +3,8 @@ import json
 from PySide6.QtWidgets import (QMainWindow, QLabel, QComboBox, QLineEdit, QPushButton, QWidget, QMessageBox,
                                QSizePolicy, QVBoxLayout)
 
-from Desenvolvimento_desktop.Desenvolvimento_desktop.CadastroCliente.model.cliente import Cliente
-from Desenvolvimento_desktop.Desenvolvimento_desktop.CadastroCliente.controller.cliente_dao import DataBase
+from CadastroCliente.model.cliente import Cliente
+from CadastroCliente.controller.cliente_dao import DataBase
 
 
 
@@ -13,6 +13,7 @@ class MainWindow (QMainWindow):
         super().__init__()
 
         self.setMinimumSize(400, 300)
+
 
         self.setWindowTitle('Cadastro de cliente')
 

@@ -1,6 +1,6 @@
 import sqlite3
 
-from Desenvolvimento_desktop.Desenvolvimento_desktop.CadastroCliente.model.cliente import Cliente
+from CadastroCliente.model.cliente import Cliente
 
 class DataBase:
     def __init__(self, nome='system.db'):
