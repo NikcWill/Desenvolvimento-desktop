@@ -1,5 +1,6 @@
 import sqlite3
 
+
 from CadastroCliente.model.cliente import Cliente
 
 class DataBase:
@@ -108,3 +109,4 @@ class DataBase:
             return e
         finally:
             self.close_connection()
+

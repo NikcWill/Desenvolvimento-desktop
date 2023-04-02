@@ -124,7 +124,21 @@ class MainWindow (QMainWindow):
             msg.setText('Erro ao cadastrar verfique os dados inseridos')
             msg.exec()
 
+     def consultar_cep(self):
+            cep = self.txt_cep.text()
+            url = f'https://viacep.com.br/ws/{cep}/json/'
+            response = requests.get(url)
 
+            if response.status_code == 200:
+                endereco = response.json()
+                self.lbl_logradoura.setText(f"Rua {endereco['logradouro']}")
+                self.lbl_bairro.setText(f"Bairro {endereco['bairro']}")
+                self.lbl_municipio.setText(f"Municipio {endereco['localidade']}")
+                self.lbl_uf.setText(f"Estado{endereco['uf']}")
+            else:
+                msg = QMessageBox()
+                msg.setInformativeText('Cep invalido ou não encontrado')
+                msg.exec()
 
 
 
