@@ -50,6 +50,7 @@ class MainWindow (QMainWindow):
         self.btn_salvar = QPushButton('Salvar')
         self.btn_limpar = QPushButton('Limpar')
         self.btn_remover = QPushButton('Remover')
+        self.btn_atualizar = QPushButton('atualizar')
 
         layout = QVBoxLayout()
         layout.addWidget(self.lbl_cpf)
@@ -78,6 +79,7 @@ class MainWindow (QMainWindow):
         layout.addWidget(self.txt_estado)
 
         layout.addWidget(self.btn_salvar)
+        layout.addWidget(self.btn_atualizar)
         layout.addWidget(self.btn_limpar)
         layout.addWidget(self.btn_remover)
 
@@ -88,6 +90,7 @@ class MainWindow (QMainWindow):
 
 
         self.btn_remover.setVisible(False)
+        self.btn_atualizar.setVisible(False)
         self.btn_salvar.clicked.connect(self.salvar_cliente)
         self.btn_limpar.clicked.connect(self.limpar_conteudo)
 
@@ -126,8 +129,12 @@ class MainWindow (QMainWindow):
             msg.setWindowTitle('Erro ao cadastrar')
             msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
             msg.exec()
+
+
             cliente_consul = db.consultar_cliente(self.txt_cpf.text())
-            self.consultar_conteudo(cliente_consul)
+
+
+            self.alterar_conteudo(self.consultar_conteudo(cliente_consul))
 
 
         else:
@@ -152,7 +159,7 @@ class MainWindow (QMainWindow):
         self.txt_estado.setText('')
 
     def consultar_conteudo(self, cliente):
-        db = DataBase()
+
 
         self.txt_cpf.setText(cliente[0])
         self.txt_nome.setText(cliente[1])
@@ -166,6 +173,32 @@ class MainWindow (QMainWindow):
         self.txt_bairro.setText(cliente[9])
         self.txt_municipio.setText(cliente[10])
         self.txt_estado.setText(cliente[11])
+        self.btn_salvar.setVisible(False)
+        self.btn_atualizar.setVisible(True)
+        self.btn_atualizar.clicked.connect(self.alterar_conteudo)
+
+        return cliente[0]
+
+    def alterar_conteudo(self):
+        db = DataBase()
+
+        cliente = Cliente(
+            cpf=self.txt_cpf.text(),
+            nome=self.txt_nome.text(),
+            telefone_fixo=self.txt_telefone_fixo.text(),
+            telefone_celular=self.txt_telefone_celular.text(),
+            sexo=self.cb_sexo.currentText(),
+            cep=self.txt_cep.text(),
+            logradouro=self.txt_logradouro.text(),
+            numero=self.txt_numero.text(),
+            complemento=self.txt_complemento.text(),
+            bairro=self.txt_bairro.text(),
+            municipio=self.txt_municipio.text(),
+            estado=self.txt_estado.text()
+        )
+        db.registrar_cliente(cliente)
+
+
 
 
 
