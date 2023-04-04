@@ -57,7 +57,7 @@ class DataBase:
             self.connection.commit()
             return 'ok'
         except sqlite3.Error as e:
-            return e
+            return str(e)
         finally:
             self.close_connection()
 
@@ -69,7 +69,7 @@ class DataBase:
             cursor.execute(f""" SELECT * FROM CLIENTE WHERE CPF = '{str(cpf).replace('.','').replace('-', '')}'""")
             return cursor.fetchone()
         except sqlite3.Error as e:
-            return None
+            return e
         finally:
             self.close_connection()
 
@@ -81,7 +81,7 @@ class DataBase:
             self.connection.commit()
             return 'ok'
         except sqlite3.Error as e:
-            print(e)
+            return print(e)
         finally:
             self.close_connection()
 

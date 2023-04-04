@@ -8,6 +8,7 @@ from CadastroCliente.controller.cliente_dao import DataBase
 
 
 
+
 class MainWindow (QMainWindow):
     def __init__(self):
         super().__init__()
@@ -17,7 +18,7 @@ class MainWindow (QMainWindow):
 
         self.setWindowTitle('Cadastro de cliente')
 
-        self.lbl_sexo = QLabel('Sexo')
+
         self.lbl_cpf = QLabel('CPF')
         self.txt_cpf = QLineEdit()
         self.txt_cpf.setInputMask('000.000.000-00')
@@ -29,6 +30,7 @@ class MainWindow (QMainWindow):
         self.lbl_telefone_celular = QLabel('Telefone Celular')
         self.txt_telefone_celular = QLineEdit()
         self.txt_telefone_celular.setInputMask('(00)00000-0000')
+        self.lbl_sexo = QLabel('Sexo')
         self.cb_sexo = QComboBox()
         self.cb_sexo.addItems(['não imformado', 'Masculino', 'Feminino'])
         self.lbl_cep = QLabel('CEP')
@@ -84,10 +86,14 @@ class MainWindow (QMainWindow):
         self.setCentralWidget(self.container)
         self.container.setLayout(layout)
 
+
         self.btn_remover.setVisible(False)
         self.btn_salvar.clicked.connect(self.salvar_cliente)
+        self.btn_limpar.clicked.connect(self.limpar_conteudo)
+
     def salvar_cliente(self):
         db = DataBase()
+
 
         cliente = Cliente(
             cpf = self.txt_cpf.text(),
@@ -105,18 +111,25 @@ class MainWindow (QMainWindow):
         )
         retorno = db.registrar_cliente(cliente)
 
+
         if retorno == 'ok':
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
             msg.setWindowTitle('Cadastro Realizado ')
             msg.setText('Cadastro realizado com sucesso')
             msg.exec()
-        elif 'UNIQUE constraint failed: ' in retorno[0]:
+
+        elif retorno == 'UNIQUE constraint failed: CLIENTE.CPF':
+
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setWindowTitle('Erro ao cadastrar')
-            msg.setText(f'O CPF {self.txt_cpf} já tem cadastro')
+            msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
             msg.exec()
+            cliente_consul = db.consultar_cliente(self.txt_cpf.text())
+            self.consultar_conteudo(cliente_consul)
+
+
         else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
@@ -124,21 +137,36 @@ class MainWindow (QMainWindow):
             msg.setText('Erro ao cadastrar verfique os dados inseridos')
             msg.exec()
 
-     def consultar_cep(self):
-            cep = self.txt_cep.text()
-            url = f'https://viacep.com.br/ws/{cep}/json/'
-            response = requests.get(url)
+    def limpar_conteudo(self):
+        self.txt_cpf.setText('')
+        self.txt_nome.setText('')
+        self.txt_telefone_fixo.setText('')
+        self.txt_telefone_celular.setText('')
+        self.cb_sexo.setCurrentIndex(0)
+        self.txt_cep.setText('')
+        self.txt_logradouro.setText('')
+        self.txt_numero.setText('')
+        self.txt_bairro.setText('')
+        self.txt_municipio.setText('')
+        self.txt_complemento.setText('')
+        self.txt_estado.setText('')
 
-            if response.status_code == 200:
-                endereco = response.json()
-                self.lbl_logradoura.setText(f"Rua {endereco['logradouro']}")
-                self.lbl_bairro.setText(f"Bairro {endereco['bairro']}")
-                self.lbl_municipio.setText(f"Municipio {endereco['localidade']}")
-                self.lbl_uf.setText(f"Estado{endereco['uf']}")
-            else:
-                msg = QMessageBox()
-                msg.setInformativeText('Cep invalido ou não encontrado')
-                msg.exec()
+    def consultar_conteudo(self, cliente):
+        db = DataBase()
+
+        self.txt_cpf.setText(cliente[0])
+        self.txt_nome.setText(cliente[1])
+        self.txt_telefone_fixo.setText(cliente[2])
+        self.txt_telefone_celular.setText(cliente[3])
+        self.cb_sexo.setCurrentText(cliente[4])
+        self.txt_cep.setText(cliente[5])
+        self.txt_logradouro.setText(cliente[6])
+        self.txt_numero.setText(cliente[7])
+        self.txt_complemento.setText(cliente[8])
+        self.txt_bairro.setText(cliente[9])
+        self.txt_municipio.setText(cliente[10])
+        self.txt_estado.setText(cliente[11])
+
 
 
 
