@@ -81,7 +81,7 @@ class DataBase:
             self.connection.commit()
             return 'ok'
         except sqlite3.Error as e:
-            return print(e)
+            return e
         finally:
             self.close_connection()
 

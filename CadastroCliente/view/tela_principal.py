@@ -50,7 +50,7 @@ class MainWindow (QMainWindow):
         self.btn_salvar = QPushButton('Salvar')
         self.btn_limpar = QPushButton('Limpar')
         self.btn_remover = QPushButton('Remover')
-        self.btn_atualizar = QPushButton('atualizar')
+
 
         layout = QVBoxLayout()
         layout.addWidget(self.lbl_cpf)
@@ -79,7 +79,6 @@ class MainWindow (QMainWindow):
         layout.addWidget(self.txt_estado)
 
         layout.addWidget(self.btn_salvar)
-        layout.addWidget(self.btn_atualizar)
         layout.addWidget(self.btn_limpar)
         layout.addWidget(self.btn_remover)
 
@@ -90,9 +89,11 @@ class MainWindow (QMainWindow):
 
 
         self.btn_remover.setVisible(False)
-        self.btn_atualizar.setVisible(False)
         self.btn_salvar.clicked.connect(self.salvar_cliente)
         self.btn_limpar.clicked.connect(self.limpar_conteudo)
+        self.txt_cpf.editingFinished.connect(self.consulta_cliente)
+        self.btn_remover.clicked.connect(self.remover_cliente)
+
 
     def salvar_cliente(self):
         db = DataBase()
@@ -130,13 +131,6 @@ class MainWindow (QMainWindow):
             msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
             msg.exec()
 
-
-            cliente_consul = db.consultar_cliente(self.txt_cpf.text())
-
-
-            self.alterar_conteudo(self.consultar_conteudo(cliente_consul))
-
-
         else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
@@ -158,45 +152,59 @@ class MainWindow (QMainWindow):
         self.txt_complemento.setText('')
         self.txt_estado.setText('')
 
-    def consultar_conteudo(self, cliente):
-
-
-        self.txt_cpf.setText(cliente[0])
-        self.txt_nome.setText(cliente[1])
-        self.txt_telefone_fixo.setText(cliente[2])
-        self.txt_telefone_celular.setText(cliente[3])
-        self.cb_sexo.setCurrentText(cliente[4])
-        self.txt_cep.setText(cliente[5])
-        self.txt_logradouro.setText(cliente[6])
-        self.txt_numero.setText(cliente[7])
-        self.txt_complemento.setText(cliente[8])
-        self.txt_bairro.setText(cliente[9])
-        self.txt_municipio.setText(cliente[10])
-        self.txt_estado.setText(cliente[11])
-        self.btn_salvar.setVisible(False)
-        self.btn_atualizar.setVisible(True)
-        self.btn_atualizar.clicked.connect(self.alterar_conteudo)
-
-        return cliente[0]
-
-    def alterar_conteudo(self):
+    def consulta_cliente(self):
         db = DataBase()
+        retorno = db.consultar_cliente(str(self.txt_cpf.text()).replace('.','').replace('-',''))
 
-        cliente = Cliente(
-            cpf=self.txt_cpf.text(),
-            nome=self.txt_nome.text(),
-            telefone_fixo=self.txt_telefone_fixo.text(),
-            telefone_celular=self.txt_telefone_celular.text(),
-            sexo=self.cb_sexo.currentText(),
-            cep=self.txt_cep.text(),
-            logradouro=self.txt_logradouro.text(),
-            numero=self.txt_numero.text(),
-            complemento=self.txt_complemento.text(),
-            bairro=self.txt_bairro.text(),
-            municipio=self.txt_municipio.text(),
-            estado=self.txt_estado.text()
-        )
-        db.registrar_cliente(cliente)
+        if retorno is not None:
+            self.btn_salvar.setText('Atulizar')
+            msg = QMessageBox()
+            msg.setWindowTitle('Cliente já cadastrado')
+            msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
+            msg.exec()
+
+
+            self.txt_nome.setText(retorno[1])
+            self.txt_telefone_fixo.setText(retorno[2])
+            self.txt_telefone_celular.setText(retorno[3])
+
+            sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
+            self.cb_sexo.setCurrentIndex(sexo_map.get(retorno[4], 0))
+            self.txt_cep.setText(retorno[5])
+            self.txt_logradouro.setText(retorno[6])
+            self.txt_numero.setText(retorno[7])
+            self.txt_complemento.setText(retorno[8])
+            self.txt_bairro.setText(retorno[9])
+            self.txt_municipio.setText(retorno[10])
+            self.txt_estado.setText(retorno[11])
+            self.btn_remover.setVisible(True)
+
+    def remover_cliente(self):
+        msg = QMessageBox()
+        msg.setWindowTitle('Remover cliente')
+        msg.setText('Este cliente será removido')
+        msg.setInformativeText(f'Você deseja remover o cliente de CPF {self.txt_cpf.text()}?')
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.button(QMessageBox.Yes).setText('Sim')
+        msg.button(QMessageBox.No).setText('Não')
+
+        resposta = msg.exec()
+
+        if resposta == QMessageBox.Yes:
+            db = DataBase()
+            retorno = db.deletar_cliente(self.txt_cpf.text())
+
+            if retorno == 'ok':
+                nv_msg = QMessageBox()
+                nv_msg.setWindowTitle('Remover cliente')
+                nv_msg.setText('Cliente removido com sucesso')
+                nv_msg.exec()
+            else:
+                nv_msg = QMessageBox()
+                nv_msg.setWindowTitle('Remover cliente')
+                nv_msg.setText('Erro ao Remover')
+                nv_msg.exec()
+
 
 
 
