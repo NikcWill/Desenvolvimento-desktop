@@ -73,6 +73,19 @@ class DataBase:
         finally:
             self.close_connection()
 
+    def consultar_todos_clientes(self):
+        self.connect()
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("SELECT * FROM CLIENTE")
+            clientes = cursor.fetchall()
+            return clientes
+        except sqlite3.Error as e:
+            print(f'Erro {e}')
+            return None
+        finally:
+            self.close_connection()
+
     def deletar_cliente(self, cpf):
         self.connect()
         try:

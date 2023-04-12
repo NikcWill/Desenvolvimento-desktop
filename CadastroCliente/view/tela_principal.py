@@ -1,7 +1,7 @@
 import requests
 import json
 from PySide6.QtWidgets import (QMainWindow, QLabel, QComboBox, QLineEdit, QPushButton, QWidget, QMessageBox,
-                               QSizePolicy, QVBoxLayout)
+                               QSizePolicy, QVBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem)
 
 from CadastroCliente.model.cliente import Cliente
 from CadastroCliente.controller.cliente_dao import DataBase
@@ -13,7 +13,7 @@ class MainWindow (QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setMinimumSize(400, 300)
+        self.setMinimumSize(500, 900)
 
 
         self.setWindowTitle('Cadastro de cliente')
@@ -50,7 +50,14 @@ class MainWindow (QMainWindow):
         self.btn_salvar = QPushButton('Salvar')
         self.btn_limpar = QPushButton('Limpar')
         self.btn_remover = QPushButton('Remover')
+        self.tabela_clientes = QTableWidget()
 
+        self.tabela_clientes.setColumnCount(12)
+        self.tabela_clientes.setHorizontalHeaderLabels(['cpf', 'nome', 'telefone fixo', 'telefone celular',
+                                                        'sexo', 'cep', 'logradouro', 'numero', 'complemento',
+                                                        'bairro', 'municipio', 'estado'])
+        self.tabela_clientes.setSelectionMode(QAbstractItemView.NoSelection)
+        self.tabela_clientes.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         layout = QVBoxLayout()
         layout.addWidget(self.lbl_cpf)
@@ -77,6 +84,7 @@ class MainWindow (QMainWindow):
         layout.addWidget(self.txt_municipio)
         layout.addWidget(self.lbl_estado)
         layout.addWidget(self.txt_estado)
+        layout.addWidget(self.tabela_clientes)
 
         layout.addWidget(self.btn_salvar)
         layout.addWidget(self.btn_limpar)
@@ -94,6 +102,8 @@ class MainWindow (QMainWindow):
         self.txt_cpf.editingFinished.connect(self.consulta_cliente)
         self.btn_remover.clicked.connect(self.remover_cliente)
         self.txt_cep.editingFinished.connect(self.consultar_endereco)
+        self.tabela_clientes.cellDoubleClicked.connect(self.carregar_dados)
+        self.popular_tabela_cliente()
 
 
 
@@ -153,7 +163,8 @@ class MainWindow (QMainWindow):
                 msg.setWindowTitle('Erro ao Atualizar ')
                 msg.setText('Erro ao cadastrar verfique os dados inseridos')
                 msg.exec()
-
+        self.popular_tabela_cliente()
+        self.txt_cpf.setReadOnly(False)
     def limpar_conteudo(self):
        for widget in self.container.children():
            if isinstance(widget, QLineEdit):
@@ -164,31 +175,32 @@ class MainWindow (QMainWindow):
        self.btn_salvar.setText('Salvar')
 
     def consulta_cliente(self):
-        db = DataBase()
-        retorno = db.consultar_cliente(str(self.txt_cpf.text()).replace('.','').replace('-',''))
+        if self.txt_cpf.text().replace('.','').replace('-','') !='':
+            db = DataBase()
+            retorno = db.consultar_cliente(str(self.txt_cpf.text()).replace('.','').replace('-',''))
 
-        if retorno is not None:
-            self.btn_salvar.setText('Atualizar')
-            msg = QMessageBox()
-            msg.setWindowTitle('Cliente já cadastrado')
-            msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
-            msg.exec()
+            if retorno is not None:
+                self.btn_salvar.setText('Atualizar')
+                msg = QMessageBox()
+                msg.setWindowTitle('Cliente já cadastrado')
+                msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
+                msg.exec()
 
 
-            self.txt_nome.setText(retorno[1])
-            self.txt_telefone_fixo.setText(retorno[2])
-            self.txt_telefone_celular.setText(retorno[3])
+                self.txt_nome.setText(retorno[1])
+                self.txt_telefone_fixo.setText(retorno[2])
+                self.txt_telefone_celular.setText(retorno[3])
 
-            sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
-            self.cb_sexo.setCurrentIndex(sexo_map.get(retorno[4], 0))
-            self.txt_cep.setText(retorno[5])
-            self.txt_logradouro.setText(retorno[6])
-            self.txt_numero.setText(retorno[7])
-            self.txt_complemento.setText(retorno[8])
-            self.txt_bairro.setText(retorno[9])
-            self.txt_municipio.setText(retorno[10])
-            self.txt_estado.setText(retorno[11])
-            self.btn_remover.setVisible(True)
+                sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
+                self.cb_sexo.setCurrentIndex(sexo_map.get(retorno[4], 0))
+                self.txt_cep.setText(retorno[5])
+                self.txt_logradouro.setText(retorno[6])
+                self.txt_numero.setText(retorno[7])
+                self.txt_complemento.setText(retorno[8])
+                self.txt_bairro.setText(retorno[9])
+                self.txt_municipio.setText(retorno[10])
+                self.txt_estado.setText(retorno[11])
+                self.btn_remover.setVisible(True)
 
     def remover_cliente(self):
         msg = QMessageBox()
@@ -215,18 +227,28 @@ class MainWindow (QMainWindow):
                 nv_msg.setWindowTitle('Remover cliente')
                 nv_msg.setText('Erro ao Remover')
                 nv_msg.exec()
+            self.txt_cpf.setReadOnly(False)
+            self.btn_salvar.setText('Salvar')
+            self.popular_tabela_cliente()
 
 
     def consultar_endereco(self):
         url = f'https://viacep.com.br/ws/{str(self.txt_cep.text()).replace(".","").replace("-","")}/json/'
         response = requests.get(url)
-        endereco = json.loads(response.text)
+        if response.status_code != 400:
+            endereco = json.loads(response.text)
+            if response.status_code == 200 and 'erro' not in endereco:
+                self.txt_logradouro.setText(endereco['logradouro'])
+                self.txt_bairro.setText(endereco['bairro'])
+                self.txt_municipio.setText(endereco['localidade'])
+                self.txt_estado.setText(endereco['uf'])
 
-        if response.status_code == 200 and 'erro' not in endereco:
-            self.txt_logradouro.setText(endereco['logradouro'])
-            self.txt_bairro.setText(endereco['bairro'])
-            self.txt_municipio.setText(endereco['localidade'])
-            self.txt_estado.setText(endereco['uf'])
+            else:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Critical)
+                msg.setWindowTitle('Erro ao Buscar CEP ')
+                msg.setText('Erro ao buscar verfique os dados inseridos')
+                msg.exec()
         else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
@@ -234,5 +256,32 @@ class MainWindow (QMainWindow):
             msg.setText('Erro ao buscar verfique os dados inseridos')
             msg.exec()
 
+    def popular_tabela_cliente(self):
+        self.tabela_clientes.setRowCount(0)
+        db = DataBase()
+        lista_cliente = db.consultar_todos_clientes()
+        self.tabela_clientes.setRowCount(len(lista_cliente))
+
+        for linha, cliente in enumerate(lista_cliente):
+            for coluna, valor in enumerate(cliente):
+                self.tabela_clientes.setItem(linha, coluna, QTableWidgetItem(str(valor)))
+
+    def carregar_dados(self, row, column):
+        self.txt_cpf.setText(self.tabela_clientes.item(row, 0).text())
+        self.txt_nome.setText(self.tabela_clientes.item(row, 1).text())
+        self.txt_telefone_fixo.setText(self.tabela_clientes.item(row, 2).text())
+        self.txt_telefone_celular.setText(self.tabela_clientes.item(row, 3).text())
+        sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
+        self.cb_sexo.setCurrentIndex(sexo_map.get(self.tabela_clientes.item(row, 4).text(),0))
+        self.txt_cep.setText(self.tabela_clientes.item(row, 5).text())
+        self.txt_logradouro.setText(self.tabela_clientes.item(row, 6).text())
+        self.txt_numero.setText(self.tabela_clientes.item(row, 7).text())
+        self.txt_complemento.setText(self.tabela_clientes.item(row, 8).text())
+        self.txt_bairro.setText(self.tabela_clientes.item(row, 9).text())
+        self.txt_municipio.setText(self.tabela_clientes.item(row, 10).text())
+        self.txt_estado.setText(self.tabela_clientes.item(row, 11).text())
+        self.btn_salvar.setText('Atualizar')
+        self.btn_remover.setVisible(True)
+        self.txt_cpf.setReadOnly(True)
 
 
