@@ -1,6 +1,6 @@
 import sqlite3
 
-from BlocoDeNotas.model.nota import Nota
+from model.nota import Nota
 
 
 class DataBase:

@@ -2,8 +2,8 @@ import sys
 
 
 from PySide6.QtWidgets import QApplication
-from BlocoDeNotas.controller.nota_dao import DataBase
-from BlocoDeNotas.view.tela_principal import MainWindow
+from controller.nota_dao import DataBase
+from view.tela_principal import MainWindow
 
 db = DataBase()
 db.connect()

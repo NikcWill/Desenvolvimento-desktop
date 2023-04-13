@@ -1,26 +1,27 @@
 
 from PySide6.QtWidgets import (QMainWindow, QLabel, QComboBox, QLineEdit, QPushButton, QWidget, QMessageBox,
-                               QSizePolicy, QVBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem)
+                               QSizePolicy, QVBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QTextEdit)
 
 
-from BlocoDeNotas.model.nota import Nota
-from BlocoDeNotas.controller.nota_dao import DataBase
+from model.nota import Nota
+from controller.nota_dao import DataBase
 
 class MainWindow (QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.setMinimumSize(500, 900)
-
-
         self.setWindowTitle('Bloco de Notas')
 
         self.lbl_id = QLabel('ID')
         self.txt_id = QLineEdit()
+
         self.lbl_titulo = QLabel('Titulo da Nota')
         self.txt_titulo = QLineEdit()
+
         self.lbl_nota = QLabel('Nota')
-        self.txt_nota = QLineEdit().setMinimumSize(200, 50)
+        self.txt_nota = QTextEdit()
+
         self.tabela_notas = QTableWidget()
 
         self.btn_salvar = QPushButton('Salvar')
