@@ -1,6 +1,6 @@
 import sqlite3
 
-from model.nota import Nota
+from model.Nota import Nota
 
 
 class DataBase:
@@ -40,6 +40,7 @@ class DataBase:
             self.connection.commit()
             return 'ok'
         except sqlite3.Error as e:
+            print(e)
             return str(e)
         finally:
             self.close_connection()
@@ -80,7 +81,7 @@ class DataBase:
         finally:
             self.close_connection()
 
-    def atualizar_cliente(self, nota = Nota):
+    def atualizar_nota(self, nota = Nota):
         self.connect()
         try:
             cursor = self.connection.cursor()
