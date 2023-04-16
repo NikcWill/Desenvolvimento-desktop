@@ -1,7 +1,7 @@
 class Nota:
-    def __init__(self, id, titulo,
+    def __init__(self, titulo,
                  data, texto):
-        self.id = id
+        self.id = None
         self.titulo = titulo
         self.data = data
         self.texto = texto

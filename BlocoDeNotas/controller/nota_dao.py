@@ -1,6 +1,6 @@
 import sqlite3
 
-from model.Nota import Nota
+from BlocoDeNotas.model.Nota import Nota
 
 
 class DataBase:
@@ -32,15 +32,14 @@ class DataBase:
     def registrar_nota(self, nota):
         self.connect()
         curso = self.connection.cursor()
-        campos_nota = ('ID', 'TITULO', 'DATA', 'TEXTO')
-        valores = f"'{nota.id}', '{nota.titulo}', '{nota.data}', {nota.texto}"
+        campos_nota = ( 'TITULO', 'DATA', 'TEXTO')
+        valores = f"'{nota.titulo}', '{nota.data}', '{nota.texto}'"
 
         try:
             curso.execute(f""" INSERT INTO NOTA {campos_nota} VALUES ({valores})""")
             self.connection.commit()
             return 'ok'
         except sqlite3.Error as e:
-            print(e)
             return str(e)
         finally:
             self.close_connection()

@@ -1,7 +1,8 @@
 import sys
 
 
-from Tools.scripts.dutree import show
+
+from tools.import show
 from PySide6.QtWidgets import QApplication
 from CadastroCliente.controller.cliente_dao import DataBase
 from CadastroCliente.view.tela_principal import MainWindow

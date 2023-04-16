@@ -5,8 +5,8 @@ from PySide6.QtWidgets import (QMainWindow, QLabel, QComboBox, QLineEdit, QPushB
                                QSizePolicy, QVBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QTextEdit)
 
 
-from model.Nota import Nota
-from controller.nota_dao import DataBase
+from BlocoDeNotas.model.Nota import Nota
+from BlocoDeNotas.controller.nota_dao import DataBase
 
 class MainWindow (QMainWindow):
     def __init__(self):
@@ -23,6 +23,8 @@ class MainWindow (QMainWindow):
 
         self.lbl_texto = QLabel('Nota')
         self.txt_texto = QTextEdit()
+
+        self.txt_data = datetime.date
 
         self.tabela_notas = QTableWidget()
 
@@ -61,18 +63,14 @@ class MainWindow (QMainWindow):
         # self.btn_remover.clicked.connect(self.remover_cliente)
         #
         # self.txt_cep.editingFinished.connect(self.consultar_endereco)
-        # self.tabela_clientes.cellDoubleClicked.connect(self.carregar_dados)
-        # self.popular_tabela_cliente()
+        self.tabela_notas.cellDoubleClicked.connect(self.carregar_dados)
+        self.popular_tabela_notas()
 
     def salvar_nota(self):
         db = DataBase()
-        retorno = db.consultar_nota(str(self.txt_id.text()))
-        id1 = 1
-        if retorno is not None:
-            id1 = self.txt_titulo.setText(retorno[1]+1)
-
+        
         nota = Nota(
-            id = self.txt_id.setText(str(id1)),
+            
             titulo = self.txt_titulo.text(),
             data = datetime.date.today(),
             texto = self.txt_texto.toPlainText()
@@ -130,4 +128,25 @@ class MainWindow (QMainWindow):
 
             self.txt_texto.setPlainText(retorno[2])
             self.txt_titulo.setText(retorno[3])
+
+    def popular_tabela_notas(self):
+        self.tabela_notas.setRowCount(0)
+        db = DataBase()
+        lista_notas = db.consultar_todas_notas()
+        self.tabela_notas.setRowCount(len(lista_notas))
+
+        for linha, nota in enumerate(lista_notas):
+            for coluna, valor in enumerate(nota):
+                self.tabela_notas.setItem(linha, coluna, QTableWidgetItem(str(valor)))
+
+    def carregar_dados(self, row, column):
+        self.txt_id.setText(self.tabela_notas.item(row, 0).text())
+        self.txt_titulo.setText(self.tabela_notas.item(row, 1).text())
+        self.txt_texto.setText(self.tabela_notas.item(row, 2).text())
+        self.txt_data(self.tabela_notas.item(row, 3).data)
+
+
+        self.btn_salvar.setText('Atualizar')
+        self.btn_remover.setVisible(True)
+        self.txt_id.setReadOnly(True)
 
