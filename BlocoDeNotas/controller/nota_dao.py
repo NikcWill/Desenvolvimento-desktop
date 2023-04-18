@@ -4,7 +4,7 @@ from BlocoDeNotas.model.Nota import Nota
 
 
 class DataBase:
-    def __init__(self, nome ='systemBloco.db'):
+    def __init__(self, nome ='systemBloco1.db'):
         self.connection = None
         self.name = nome
 
@@ -24,16 +24,16 @@ class DataBase:
             """CREATE TABLE IF NOT EXISTS NOTA(
             ID INTEGER PRIMARY KEY AUTOINCREMENT,
             TITULO TEXT,
-            DATA DATE,
-            TEXTO TEXT
+            TEXTO TEXT,
+            DATA DATE
             );""")
         self.close_connection()
 
     def registrar_nota(self, nota):
         self.connect()
         curso = self.connection.cursor()
-        campos_nota = ( 'TITULO', 'DATA', 'TEXTO')
-        valores = f"'{nota.titulo}', '{nota.data}', '{nota.texto}'"
+        campos_nota = ( 'TITULO', 'TEXTO', 'DATA')
+        valores = f"'{nota.titulo}', '{nota.texto}', '{nota.data}'"
 
         try:
             curso.execute(f""" INSERT INTO NOTA {campos_nota} VALUES ({valores})""")
@@ -87,8 +87,8 @@ class DataBase:
             cursor.execute(f"""UPDATE NOTA SET
                             ID = '{nota.id}', 
                             TITULO = '{nota.titulo}', 
-                            DATA = '{nota.data}', 
-                            TEXTO = '{nota.texto}'""")
+                            TEXTO = '{nota.texto}', 
+                            DATA = '{nota.data}'""")
 
             self.connection.commit()
             return 'ok'

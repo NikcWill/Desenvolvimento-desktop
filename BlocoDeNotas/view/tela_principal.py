@@ -62,7 +62,6 @@ class MainWindow (QMainWindow):
 
         # self.btn_remover.clicked.connect(self.remover_cliente)
         #
-        # self.txt_cep.editingFinished.connect(self.consultar_endereco)
         self.tabela_notas.cellDoubleClicked.connect(self.carregar_dados)
         self.popular_tabela_notas()
 
@@ -107,9 +106,10 @@ class MainWindow (QMainWindow):
                 msg.setWindowTitle('Erro ao Atualizar ')
                 msg.setText('Erro ao atualizar verfique os dados inseridos')
                 msg.exec()
+                self.txt_id.setReadOnly(False)
 
-            #self.popular_tabela_cliente()
-            self.txt_id.setReadOnly(False)
+        self.popular_tabela_notas()
+
 
     def consulta_nota(self):
         db = DataBase()
@@ -143,7 +143,7 @@ class MainWindow (QMainWindow):
         self.txt_id.setText(self.tabela_notas.item(row, 0).text())
         self.txt_titulo.setText(self.tabela_notas.item(row, 1).text())
         self.txt_texto.setText(self.tabela_notas.item(row, 2).text())
-        self.txt_data(self.tabela_notas.item(row, 3).data)
+        self.txt_data(self.tabela_notas.item(row, 3).text())
 
 
         self.btn_salvar.setText('Atualizar')
