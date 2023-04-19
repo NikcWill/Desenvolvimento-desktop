@@ -1,12 +1,12 @@
 import datetime
 
-
 from PySide6.QtWidgets import (QMainWindow, QLabel, QComboBox, QLineEdit, QPushButton, QWidget, QMessageBox,
-                               QSizePolicy, QVBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QTextEdit)
+                               QSizePolicy, QVBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QTextEdit,
+                               QHeaderView)
 
 
-from BlocoDeNotas.model.Nota import Nota
-from BlocoDeNotas.controller.nota_dao import DataBase
+from model.Nota import Nota
+from controller.nota_dao import DataBase
 
 class MainWindow (QMainWindow):
     def __init__(self):
@@ -30,11 +30,18 @@ class MainWindow (QMainWindow):
 
         self.btn_salvar = QPushButton('Salvar')
         self.btn_remover = QPushButton('Remover')
+        self.btn_limpar = QPushButton('Limpar')
 
         self.tabela_notas.setColumnCount(4)
         self.tabela_notas.setHorizontalHeaderLabels(['ID', 'Titulo', 'Texto', 'Data'])
         self.tabela_notas.setSelectionMode(QAbstractItemView.NoSelection)
         self.tabela_notas.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        cabeca = self.tabela_notas.horizontalHeader()
+
+        for i in range(self.tabela_notas.columnCount()):
+            if i != 2:
+                cabeca.setSectionResizeMode(i, QHeaderView.ResizeToContents)
 
         layout = QVBoxLayout()
         layout.addWidget(self.lbl_id)
@@ -47,21 +54,20 @@ class MainWindow (QMainWindow):
 
         layout.addWidget(self.btn_salvar)
         layout.addWidget(self.btn_remover)
+        layout.addWidget(self.btn_limpar)
 
         self.container = QWidget()
         self.container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setCentralWidget(self.container)
         self.container.setLayout(layout)
 
-
         self.lbl_id.setVisible(False)
         self.txt_id.setVisible(False)
         self.btn_remover.setVisible(False)
 
         self.btn_salvar.clicked.connect(self.salvar_nota)
-
-        # self.btn_remover.clicked.connect(self.remover_cliente)
-        #
+        self.btn_limpar.clicked.connect(self.limpar_conteudo)
+        self.btn_remover.clicked.connect(self.remover_nota)
         self.tabela_notas.cellDoubleClicked.connect(self.carregar_dados)
         self.popular_tabela_notas()
 
@@ -69,11 +75,10 @@ class MainWindow (QMainWindow):
         db = DataBase()
         
         nota = Nota(
-            
+            id = self.txt_id.text(),
             titulo = self.txt_titulo.text(),
             data = datetime.date.today(),
             texto = self.txt_texto.toPlainText()
-
         )
 
         if self.btn_salvar.text() == 'Salvar':
@@ -99,6 +104,7 @@ class MainWindow (QMainWindow):
                 msg.setWindowTitle('Nota Atualizada ')
                 msg.setText('Nota atualizada com sucesso')
                 msg.exec()
+                self.popular_tabela_notas()
 
             else:
                 msg = QMessageBox()
@@ -106,10 +112,8 @@ class MainWindow (QMainWindow):
                 msg.setWindowTitle('Erro ao Atualizar ')
                 msg.setText('Erro ao atualizar verfique os dados inseridos')
                 msg.exec()
-                self.txt_id.setReadOnly(False)
 
         self.popular_tabela_notas()
-
 
     def consulta_nota(self):
         db = DataBase()
@@ -121,10 +125,6 @@ class MainWindow (QMainWindow):
             msg.setWindowTitle('Atualizar nota')
             msg.setText(f'A Nota do ID {self.txt_id.text()} poderá ser editada ou excluida')
             msg.exec()
-
-            self.btn_remover.setVisible(True)
-            self.lbl_id.setVisible(True)
-            self.txt_id.setVisible(True)
 
             self.txt_texto.setPlainText(retorno[2])
             self.txt_titulo.setText(retorno[3])
@@ -143,10 +143,53 @@ class MainWindow (QMainWindow):
         self.txt_id.setText(self.tabela_notas.item(row, 0).text())
         self.txt_titulo.setText(self.tabela_notas.item(row, 1).text())
         self.txt_texto.setText(self.tabela_notas.item(row, 2).text())
-        self.txt_data(self.tabela_notas.item(row, 3).text())
-
 
         self.btn_salvar.setText('Atualizar')
         self.btn_remover.setVisible(True)
         self.txt_id.setReadOnly(True)
+
+        self.lbl_id.setVisible(True)
+        self.txt_id.setVisible(True)
+
+        self.popular_tabela_notas()
+    def limpar_conteudo(self):
+        for widget in self.container.children():
+            if isinstance(widget, QLineEdit):
+                widget.clear()
+            elif isinstance(widget, QTextEdit):
+                widget.clear()
+            elif isinstance(widget, QMessageBox):
+                widget.setCurrentIndex(0)
+        self.lbl_id.setVisible(False)
+        self.txt_id.setVisible(False)
+        self.btn_remover.setVisible(False)
+        self.btn_salvar.setText('Salvar')
+    def remover_nota(self):
+        msg = QMessageBox()
+        msg.setWindowTitle('Remover Nota')
+        msg.setText('Esta nota será removida')
+        msg.setInformativeText(f'Você deseja remover a nota {self.txt_id.text()}?')
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.button(QMessageBox.Yes).setText('Sim')
+        msg.button(QMessageBox.No).setText('Não')
+
+        resposta = msg.exec()
+
+        if resposta == QMessageBox.Yes:
+            db = DataBase()
+
+            if db.deletar_nota(self.txt_id.text()) == 'ok':
+                nv_msg = QMessageBox()
+                nv_msg.setWindowTitle('Remover nota')
+                nv_msg.setText('Nota removida com sucesso')
+                nv_msg.exec()
+            else:
+                nv_msg = QMessageBox()
+                nv_msg.setWindowTitle('Remover nota')
+                nv_msg.setText('Erro ao Remover')
+                nv_msg.exec()
+            self.txt_id.setReadOnly(False)
+            self.btn_salvar.setText('Salvar')
+            self.popular_tabela_notas()
+            self.limpar_conteudo()
 

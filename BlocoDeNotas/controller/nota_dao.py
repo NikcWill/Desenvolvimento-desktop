@@ -1,7 +1,6 @@
 import sqlite3
 
-from BlocoDeNotas.model.Nota import Nota
-
+from model.Nota import Nota
 
 class DataBase:
     def __init__(self, nome ='systemBloco1.db'):
@@ -72,7 +71,7 @@ class DataBase:
         self.connect()
         try:
             cursor = self.connection.cursor()
-            cursor.execute(f""" DELETE FROM NOTA FROM NOTA WHERE ID = '{id}'""")
+            cursor.execute(f""" DELETE FROM NOTA WHERE ID = '{id}'""")
             self.connection.commit()
             return 'ok'
         except sqlite3.Error as e:
@@ -84,12 +83,11 @@ class DataBase:
         self.connect()
         try:
             cursor = self.connection.cursor()
-            cursor.execute(f"""UPDATE NOTA SET
-                            ID = '{nota.id}', 
+            cursor.execute(f"""UPDATE NOTA SET 
                             TITULO = '{nota.titulo}', 
-                            TEXTO = '{nota.texto}', 
-                            DATA = '{nota.data}'""")
-
+                            TEXTO = '{nota.texto}'
+                            WHERE ID = '{nota.id}';
+                            """)
             self.connection.commit()
             return 'ok'
         except sqlite3.Error as e:
