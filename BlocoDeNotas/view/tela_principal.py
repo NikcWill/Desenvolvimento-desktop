@@ -37,11 +37,10 @@ class MainWindow (QMainWindow):
         self.tabela_notas.setSelectionMode(QAbstractItemView.NoSelection)
         self.tabela_notas.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-        cabeca = self.tabela_notas.horizontalHeader()
-
-        for i in range(self.tabela_notas.columnCount()):
-            if i != 2:
-                cabeca.setSectionResizeMode(i, QHeaderView.ResizeToContents)
+        self.tabela_notas.setColumnWidth(0, 10)
+        self.tabela_notas.setColumnWidth(1, 145)
+        self.tabela_notas.setColumnWidth(2, 200)
+        self.tabela_notas.setColumnWidth(3, 80)
 
         layout = QVBoxLayout()
         layout.addWidget(self.lbl_id)
@@ -64,12 +63,28 @@ class MainWindow (QMainWindow):
         self.lbl_id.setVisible(False)
         self.txt_id.setVisible(False)
         self.btn_remover.setVisible(False)
+        self.btn_salvar.setEnabled(False)
+        self.btn_limpar.setVisible(False)
 
         self.btn_salvar.clicked.connect(self.salvar_nota)
         self.btn_limpar.clicked.connect(self.limpar_conteudo)
         self.btn_remover.clicked.connect(self.remover_nota)
         self.tabela_notas.cellDoubleClicked.connect(self.carregar_dados)
         self.popular_tabela_notas()
+
+        self.txt_titulo.textChanged.connect(self.on_change)
+        self.txt_texto.textChanged.connect(self.on_change)
+
+    def on_change(self):
+
+        if self.txt_texto.toPlainText() != '' \
+                or self.txt_titulo.text() != '':
+            self.btn_limpar.setVisible(True)
+            self.btn_salvar.setEnabled(True)
+
+        else:
+            self.btn_limpar.setVisible(False)
+            self.btn_salvar.setEnabled(False)
 
     def salvar_nota(self):
         db = DataBase()
