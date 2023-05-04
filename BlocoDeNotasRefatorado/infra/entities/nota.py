@@ -1,12 +1,12 @@
 from infra.configs.base import Base
-from sqlalchemy import  Column, String, Integer,DateTime
+from sqlalchemy import Column, String, Integer,DateTime
 
-class Nota:
+class Nota(Base):
     __tablename__ = 'nota'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    titulo = Column(String, nullable=False)
-    texto = Column(String, nullable=False)
+    titulo = Column(String(100), nullable=False)
+    texto = Column(String(100), nullable=False)
     data = Column(DateTime)
 
     def __repr__(self):

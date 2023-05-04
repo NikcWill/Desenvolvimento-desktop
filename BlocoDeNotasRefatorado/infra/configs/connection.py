@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from infra.configs.base import Base
 
-class DBCOnnectionHandler:
+class DBConnectionHandler:
     def __init__(self):
         #Dados endereço do banco de dados
         self.__connectio_string = 'mysql+pymysql://root:Senac2021@localhost:3306/notas'
@@ -14,8 +15,9 @@ class DBCOnnectionHandler:
         #Validação da exitencia do banco de dados ao instanciar um obj
         self.__create_database()
 
+
 #Método para validação da exitencia do banco de dados caso não realizar a criação
-    def create_database(self):
+    def __create_database(self):
         engine = create_engine(self.__connectio_string, echo=True)
         try:
             engine.connect()
@@ -26,10 +28,17 @@ class DBCOnnectionHandler:
                 conn.execute(f'CREATE DATABASE IF NOT EXISTS {self.__connectio_string.rsplit("/", 1)[1]}')
                 conn.close()
                 print('Banco criado')
+                self.__create_table()
             else:
                 raise e
+
+    def __create_table(self):
+        engine = create_engine(self.__connectio_string, echo=True)
+        Base.metadata.create_all(bind=engine, checkfirst=True)
+        print("Tabela criada com sucesso!")
+
 #Função para criação da engine sem necessidade de informar dados de endereço do banco e utilização de queryes escritas a mão
-    def __create_engine(self):
+    def __create_database_engine(self):
         engine = create_engine(self.__connectio_string)
         return engine
 
@@ -38,7 +47,7 @@ class DBCOnnectionHandler:
 #Função magica que define qualquer comportamento ao serem geradas instancias
     def __enter__(self):
         session_maker = sessionmaker(bind=self.__engine)
-        print('Greando conexão')
+        print('Gerando conexão')
         self.session = session_maker()
         return self
 

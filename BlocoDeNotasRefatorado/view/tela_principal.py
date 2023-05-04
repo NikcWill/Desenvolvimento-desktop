@@ -1,21 +1,20 @@
 import datetime
 
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (QMainWindow, QLabel, QComboBox, QLineEdit, QPushButton, QWidget, QMessageBox,
                                QSizePolicy, QVBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QTextEdit,
                                QHeaderView)
 
+from infra.repository.nota_repository import NotaRepository
+from infra.entities.nota import Nota
 
-from model.Nota import Nota
-from controller.nota_dao import DataBase
-
-from infra.configs.connection import DBCOnnectionHandler
+from infra.configs.connection import DBConnectionHandler
 
 class MainWindow (QMainWindow):
     def __init__(self):
         super().__init__()
 
-        conn = DBCOnnectionHandler()
-        conn.create_database()
+        conn = DBConnectionHandler()
 
         self.setMinimumSize(500, 900)
         self.setWindowTitle('Bloco de Notas')
@@ -92,17 +91,16 @@ class MainWindow (QMainWindow):
             self.btn_salvar.setEnabled(False)
 
     def salvar_nota(self):
-        db = DataBase()
-        
+        db = NotaRepository()
         nota = Nota(
-            id = self.txt_id.text(),
+
             titulo = self.txt_titulo.text(),
-            data = datetime.date.today(),
+            data = datetime.date.today().strftime('%d/%m/%y'),
             texto = self.txt_texto.toPlainText()
         )
 
         if self.btn_salvar.text() == 'Salvar':
-            retorno = db.registrar_nota(nota)
+            retorno = db.insert(nota)
             if retorno == 'ok':
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
@@ -115,6 +113,7 @@ class MainWindow (QMainWindow):
                 msg.setWindowTitle('Erro ao cadastrar ')
                 msg.setText('Erro ao cadastrar verfique os dados inseridos')
                 msg.exec()
+
 
         elif self.btn_salvar.text() == 'Atualizar':
             retorno = db.atualizar_nota(nota)
@@ -151,13 +150,21 @@ class MainWindow (QMainWindow):
 
     def popular_tabela_notas(self):
         self.tabela_notas.setRowCount(0)
-        db = DataBase()
-        lista_notas = db.consultar_todas_notas()
+        conn = NotaRepository()
+        lista_notas = conn.select_all()
         self.tabela_notas.setRowCount(len(lista_notas))
 
-        for linha, nota in enumerate(lista_notas):
-            for coluna, valor in enumerate(nota):
-                self.tabela_notas.setItem(linha, coluna, QTableWidgetItem(str(valor)))
+        linha = 0
+
+        for nota in lista_notas:
+            valores = [nota.id, nota.titulo, nota.texto, nota.data]
+            for valor in valores:
+                item = QTableWidgetItem(str(valor))
+                fonte = QFont('Arial', 10)
+                self.tabela_notas.setItem(linha, valores.index(valor), item)
+                self.tabela_notas.item(linha, valores.index(valor))
+            linha+=1
+
 
     def carregar_dados(self, row, column):
         self.txt_id.setText(self.tabela_notas.item(row, 0).text())

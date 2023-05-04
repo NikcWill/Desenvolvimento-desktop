@@ -1,26 +1,38 @@
-from infra.configs.connection import DBCOnnectionHandler
+from infra.configs.connection import DBConnectionHandler
 from infra.entities.nota import Nota
 
 class NotaRepository:
-    def select(self):
-        with DBCOnnectionHandler() as db:
+
+    def select_all(self):
+        with DBConnectionHandler() as db:
             data = db.session.query(Nota).all()
             return data
 
-    def insert(self, titulo, texto, data):
-        with DBCOnnectionHandler() as db:
-            data_insert = Nota (titulo=titulo, texto=texto, data=data)
-        db.session.add(data_insert)
-        db.session.commit()
+    def select(self, id):
+        with DBConnectionHandler() as db:
+            data = db.session.query(Nota).filter(Nota.id == id).first()
+            return data
+
+    def insert(self, nota):
+        with DBConnectionHandler() as db:
+            try:
+                db.session.add(nota)
+                db.session.commit()
+                return 'ok'
+            except Exception as e:
+                db.session.rollback()
+
+                return e
+
 
     def delete(self, id):
-        with DBCOnnectionHandler() as db:
+        with DBConnectionHandler() as db:
             db.session.query(Nota).filter(Nota.id == id).delete()
             db.session.commit()
 
-    def update(self, id, titulo, texto, data):
-        with DBCOnnectionHandler() as db:
+    def update(self, id, titulo, texto):
+        with DBConnectionHandler() as db:
             db.session.query(Nota).filter(Nota.id == id)\
-            .upadate({'titulo' : titulo, 'texto' : texto,})
+            .upadate({'titulo' : titulo, 'texto' : texto})
         db.session.commit()
 
