@@ -1,6 +1,7 @@
 from infra.configs.connection import DBConnectionHandler
 from infra.entities.nota import Nota
 
+
 class NotaRepository:
 
     def select_all(self):
@@ -21,18 +22,24 @@ class NotaRepository:
                 return 'ok'
             except Exception as e:
                 db.session.rollback()
-
                 return e
-
 
     def delete(self, id):
         with DBConnectionHandler() as db:
             db.session.query(Nota).filter(Nota.id == id).delete()
             db.session.commit()
 
-    def update(self, id, titulo, texto):
+    def update(self, nota):
+        print('oi guries')
+        print(nota.__dict__)
+        print('nota.id', nota.id)
         with DBConnectionHandler() as db:
-            db.session.query(Nota).filter(Nota.id == id)\
-            .upadate({'titulo' : titulo, 'texto' : texto})
-        db.session.commit()
 
+            try:
+                db.session.query(Nota).filter(Nota.id == nota.id) \
+                    .update({'titulo': nota.titulo, 'texto': nota.texto})
+                db.session.commit()
+                return 'ok'
+            except Exception as e:
+                db.session.rollback()
+                return e

@@ -82,10 +82,11 @@ class MainWindow (QMainWindow):
     def on_change(self):
 
         if self.txt_texto.toPlainText() != '' \
+                and self.txt_titulo.text() != '':
+            self.btn_salvar.setEnabled(True)
+        elif self.txt_texto.toPlainText() != '' \
                 or self.txt_titulo.text() != '':
             self.btn_limpar.setVisible(True)
-            self.btn_salvar.setEnabled(True)
-
         else:
             self.btn_limpar.setVisible(False)
             self.btn_salvar.setEnabled(False)
@@ -116,7 +117,9 @@ class MainWindow (QMainWindow):
 
 
         elif self.btn_salvar.text() == 'Atualizar':
-            retorno = db.atualizar_nota(nota)
+            nota.id = int(self.txt_id.text())
+            retorno = db.update(nota)
+
             if retorno == 'ok':
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
@@ -133,9 +136,10 @@ class MainWindow (QMainWindow):
                 msg.exec()
 
         self.popular_tabela_notas()
+        self.limpar_conteudo()
 
     def consulta_nota(self):
-        db = DataBase()
+        db = NotaRepository()
         retorno = db.consultar_nota(str(self.txt_id.text()))
 
         if retorno is not None:
@@ -203,9 +207,9 @@ class MainWindow (QMainWindow):
         resposta = msg.exec()
 
         if resposta == QMessageBox.Yes:
-            db = DataBase()
+            db = NotaRepository()
 
-            if db.deletar_nota(self.txt_id.text()) == 'ok':
+            if db.delete(self.txt_id.text()) == 'ok':
                 nv_msg = QMessageBox()
                 nv_msg.setWindowTitle('Remover nota')
                 nv_msg.setText('Nota removida com sucesso')
