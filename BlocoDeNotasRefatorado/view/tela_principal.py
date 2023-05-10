@@ -140,7 +140,7 @@ class MainWindow (QMainWindow):
 
     def consulta_nota(self):
         db = NotaRepository()
-        retorno = db.consultar_nota(str(self.txt_id.text()))
+        retorno = db.select(str(self.txt_id.text()))
 
         if retorno is not None:
             self.btn_salvar.setText('Atualizar')
@@ -157,7 +157,6 @@ class MainWindow (QMainWindow):
         conn = NotaRepository()
         lista_notas = conn.select_all()
         self.tabela_notas.setRowCount(len(lista_notas))
-
         linha = 0
 
         for nota in lista_notas:
@@ -168,7 +167,6 @@ class MainWindow (QMainWindow):
                 self.tabela_notas.setItem(linha, valores.index(valor), item)
                 self.tabela_notas.item(linha, valores.index(valor))
             linha+=1
-
 
     def carregar_dados(self, row, column):
         self.txt_id.setText(self.tabela_notas.item(row, 0).text())

@@ -30,9 +30,6 @@ class NotaRepository:
             db.session.commit()
 
     def update(self, nota):
-        print('oi guries')
-        print(nota.__dict__)
-        print('nota.id', nota.id)
         with DBConnectionHandler() as db:
 
             try:
