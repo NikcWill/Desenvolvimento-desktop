@@ -121,6 +121,7 @@ class MainWindow (QMainWindow):
             municipio=self.txt_municipio.text(),
             estado=self.txt_estado.text()
         )
+
         if self.btn_salvar.text() == 'Salvar':
             retorno = db.insert(cliente)
 
@@ -130,6 +131,7 @@ class MainWindow (QMainWindow):
                 msg.setWindowTitle('Cadastro Realizado ')
                 msg.setText('Cadastro realizado com sucesso')
                 msg.exec()
+                self.limpar_conteudo()
 
             elif retorno == 'UNIQUE constraint failed: CLIENTE.CPF':
 
@@ -138,6 +140,7 @@ class MainWindow (QMainWindow):
                 msg.setWindowTitle('Erro ao cadastrar')
                 msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
                 msg.exec()
+
 
             else:
                 msg = QMessageBox()
@@ -171,18 +174,20 @@ class MainWindow (QMainWindow):
                widget.setCurrentIndex(0)
        self.btn_remover.setVisible(False)
        self.btn_salvar.setText('Salvar')
+       self.txt_cpf.setReadOnly(False)
 
     def consulta_cliente(self):
-        if self.txt_cpf.text().replace('.','').replace('-','') !='':
+        if self.txt_cpf.text().replace('.','').replace('-','') != '':
             db = ClienteRepository()
-            retorno = db.select(str(self.txt_cpf.text()).replace('.','').replace('-',''))
-
+            retorno = db.select(str(self.txt_cpf.text()))
+            print(str(retorno))
             if retorno is not None:
                 self.btn_salvar.setText('Atualizar')
                 msg = QMessageBox()
                 msg.setWindowTitle('Cliente já cadastrado')
                 msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
                 msg.exec()
+                self.carregar_dados_por_cpf(retorno)
 
 
                 self.txt_nome.setText(retorno[1])
@@ -220,14 +225,16 @@ class MainWindow (QMainWindow):
                 nv_msg.setWindowTitle('Remover cliente')
                 nv_msg.setText('Cliente removido com sucesso')
                 nv_msg.exec()
+                self.limpar_conteudo()
             else:
                 nv_msg = QMessageBox()
                 nv_msg.setWindowTitle('Remover cliente')
                 nv_msg.setText('Erro ao Remover')
                 nv_msg.exec()
-            self.txt_cpf.setReadOnly(False)
-            self.btn_salvar.setText('Salvar')
-            self.popular_tabela_cliente()
+
+        self.txt_cpf.setReadOnly(False)
+        self.btn_salvar.setText('Salvar')
+        self.popular_tabela_cliente()
 
 
     def consultar_endereco(self):
@@ -258,6 +265,8 @@ class MainWindow (QMainWindow):
         self.tabela_clientes.setRowCount(0)
         conn = ClienteRepository()
         lista_cliente = conn.select_all()
+
+
         self.tabela_clientes.setRowCount(len(lista_cliente))
         linha = 0
 
@@ -270,14 +279,16 @@ class MainWindow (QMainWindow):
                 item = QTableWidgetItem(str(valor))
                 self.tabela_clientes.setItem(linha, valores.index(valor), item)
                 self.tabela_clientes.item(linha, valores.index(valor))
+            linha += 1
 
     def carregar_dados(self, row, column):
+        print(row)
         self.txt_cpf.setText(self.tabela_clientes.item(row, 0).text())
         self.txt_nome.setText(self.tabela_clientes.item(row, 1).text())
-        self.txt_telefone_fixo.setText(self.tabela_clientes.item(row, 2).text())
+        self.txt_telefone_fixo.setText(self.tabela_clientes.item(row, 2).text()if self.tabela_clientes.item(row, 2) is not None else '')
         self.txt_telefone_celular.setText(self.tabela_clientes.item(row, 3).text())
         sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
-        self.cb_sexo.setCurrentIndex(sexo_map.get(self.tabela_clientes.item(row, 4).text(),0))
+        self.cb_sexo.setCurrentIndex(sexo_map.get(self.tabela_clientes.item(row, 4).text(), 0))
         self.txt_cep.setText(self.tabela_clientes.item(row, 5).text())
         self.txt_logradouro.setText(self.tabela_clientes.item(row, 6).text())
         self.txt_numero.setText(self.tabela_clientes.item(row, 7).text())
@@ -289,5 +300,23 @@ class MainWindow (QMainWindow):
         self.btn_remover.setVisible(True)
         self.txt_cpf.setReadOnly(True)
         self.popular_tabela_cliente()
+
+    def carregar_dados_por_cpf(self, cliente):
+            self.txt_nome.setText(cliente.nome)
+            self.txt_telefone_fixo.setText(cliente.telefone_fixo)
+            self.txt_telefone_celular.setText(cliente.telefone_celular)
+            sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
+            self.cb_sexo.setCurrentIndex(sexo_map.get(cliente.sexo, 0))
+            self.txt_cep.setText(cliente.cep)
+            self.txt_logradouro.setText(cliente.logradouro)
+            self.txt_numero.setText(cliente.numero)
+            self.txt_complemento.setText(cliente.complemento)
+            self.txt_bairro.setText(cliente.bairro)
+            self.txt_municipio.setText(cliente.municipio)
+            self.txt_estado.setText(cliente.estado)
+            self.btn_salvar.setText('Atualizar')
+            self.btn_remover.setVisible(True)
+            self.txt_cpf.setReadOnly(True)
+            self.popular_tabela_cliente()
 
 

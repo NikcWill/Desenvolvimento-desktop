@@ -14,6 +14,7 @@ class DBConnectionHandler:
         self.session = None
         #Validação da exitencia do banco de dados ao instanciar um obj
         self.__create_database()
+        self.__create_table()
 
 
 #Método para validação da exitencia do banco de dados caso não realizar a criação
