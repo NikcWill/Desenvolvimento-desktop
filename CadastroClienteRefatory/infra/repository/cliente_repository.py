@@ -41,8 +41,8 @@ class ClienteRepository:
 
             try:
                 db.session.query(Cliente).filter(Cliente.cpf == cliente.cpf) \
-                    .update({'nome': cliente.nome, 'cpf': cliente.cpf, 'telefone_fixo': cliente.telefone_fixo,\
-                             'telefone_celular ': cliente.telefone_celular, 'sexo': cliente.sexo, 'cep': cliente.cep,\
+                    .update({'nome': cliente.nome, 'telefone_fixo': cliente.telefone_fixo,\
+                             'telefone_celular': cliente.telefone_celular, 'sexo': cliente.sexo, 'cep': cliente.cep,\
                              'logradouro': cliente.logradouro, 'numero': cliente.numero, 'complemento': cliente.complemento,\
                              'bairro': cliente.bairro, 'municipio': cliente.municipio, 'estado': cliente.estado})
                 db.session.commit()

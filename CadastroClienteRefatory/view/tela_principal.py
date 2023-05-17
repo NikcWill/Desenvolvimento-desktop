@@ -95,6 +95,10 @@ class MainWindow (QMainWindow):
 
 
         self.btn_remover.setVisible(False)
+        self.btn_salvar.setEnabled(False)
+        self.btn_limpar.setVisible(False)
+
+
         self.btn_salvar.clicked.connect(self.salvar_cliente)
         self.btn_limpar.clicked.connect(self.limpar_conteudo)
         self.txt_cpf.editingFinished.connect(self.consulta_cliente)
@@ -103,6 +107,19 @@ class MainWindow (QMainWindow):
         self.tabela_clientes.cellDoubleClicked.connect(self.carregar_dados)
         self.popular_tabela_cliente()
 
+        self.txt_cpf.textChanged.connect(self.on_change)
+        self.txt_nome.textChanged.connect(self.on_change)
+
+    def on_change(self):
+
+        if self.txt_cpf.text().replace('.','').replace('-','') != '' \
+                and self.txt_nome.text() != '':
+            self.btn_limpar.setVisible(True)
+            self.btn_salvar.setEnabled(True)
+
+        else:
+            self.btn_limpar.setVisible(False)
+            self.btn_salvar.setEnabled(False)
 
 
     def salvar_cliente(self):
@@ -152,6 +169,8 @@ class MainWindow (QMainWindow):
 
             retorno = db.update(cliente)
 
+            print(f'O retorno é {retorno}')
+
             if retorno == 'ok':
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
@@ -166,12 +185,14 @@ class MainWindow (QMainWindow):
                 msg.exec()
         self.popular_tabela_cliente()
         self.txt_cpf.setReadOnly(False)
+        self.limpar_conteudo()
     def limpar_conteudo(self):
        for widget in self.container.children():
            if isinstance(widget, QLineEdit):
                widget.clear()
            elif isinstance(widget, QMessageBox):
                widget.setCurrentIndex(0)
+       self.cb_sexo.setCurrentIndex(0)
        self.btn_remover.setVisible(False)
        self.btn_salvar.setText('Salvar')
        self.txt_cpf.setReadOnly(False)
@@ -188,22 +209,6 @@ class MainWindow (QMainWindow):
                 msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
                 msg.exec()
                 self.carregar_dados_por_cpf(retorno)
-
-
-                self.txt_nome.setText(retorno[1])
-                self.txt_telefone_fixo.setText(retorno[2])
-                self.txt_telefone_celular.setText(retorno[3])
-
-                sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
-                self.cb_sexo.setCurrentIndex(sexo_map.get(retorno[4], 0))
-                self.txt_cep.setText(retorno[5])
-                self.txt_logradouro.setText(retorno[6])
-                self.txt_numero.setText(retorno[7])
-                self.txt_complemento.setText(retorno[8])
-                self.txt_bairro.setText(retorno[9])
-                self.txt_municipio.setText(retorno[10])
-                self.txt_estado.setText(retorno[11])
-                self.btn_remover.setVisible(True)
 
     def remover_cliente(self):
         msg = QMessageBox()
