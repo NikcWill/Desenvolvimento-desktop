@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QWidget" name="widget_6" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QWidget" name="widget_5" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Cadastro de Cliente&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_3" native="true">
+            <widget class="QLabel" name="lbl_nome">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>27</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Nome</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_cpf">
+             <property name="geometry">
+              <rect>
+               <x>440</x>
+               <y>10</y>
+               <width>19</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>CPF</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_sexo">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>50</y>
+               <width>24</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Sexo</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_telefone_Fixo">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>50</y>
+               <width>65</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Telefone Fixo</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_telefone_Fixo_2">
+             <property name="geometry">
+              <rect>
+               <x>390</x>
+               <y>50</y>
+               <width>73</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Telefone movel</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cb_sexo">
+             <property name="geometry">
+              <rect>
+               <x>50</x>
+               <y>50</y>
+               <width>72</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>Selecione</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Masculino</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Feminino</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QLineEdit" name="txt_cpf">
+             <property name="geometry">
+              <rect>
+               <x>480</x>
+               <y>10</y>
+               <width>171</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="inputMask">
+              <string>999.999.999-99</string>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_nome">
+             <property name="geometry">
+              <rect>
+               <x>50</x>
+               <y>10</y>
+               <width>371</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="placeholderText">
+              <string>Insiria seu nome</string>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_telefone_movel">
+             <property name="geometry">
+              <rect>
+               <x>480</x>
+               <y>50</y>
+               <width>133</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="inputMask">
+              <string>(99)99999-9999</string>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_telefone_Fixo">
+             <property name="geometry">
+              <rect>
+               <x>240</x>
+               <y>50</y>
+               <width>133</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="inputMask">
+              <string>(99)99999-9999</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_4" native="true">
+            <widget class="QLabel" name="lbl_cep">
+             <property name="geometry">
+              <rect>
+               <x>590</x>
+               <y>40</y>
+               <width>47</width>
+               <height>13</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>CEP</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_logradouro">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>0</y>
+               <width>61</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Logradouro</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_numero">
+             <property name="geometry">
+              <rect>
+               <x>600</x>
+               <y>10</y>
+               <width>47</width>
+               <height>13</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Número</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_complemento">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>10</y>
+               <width>71</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Complemento</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_bairro">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>47</width>
+               <height>13</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Bairro</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_municipio">
+             <property name="geometry">
+              <rect>
+               <x>190</x>
+               <y>40</y>
+               <width>47</width>
+               <height>13</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Municipio</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lbl_estado">
+             <property name="geometry">
+              <rect>
+               <x>380</x>
+               <y>40</y>
+               <width>47</width>
+               <height>13</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Estado</string>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_logradouro">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>0</y>
+               <width>281</width>
+               <height>20</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_complemnto">
+             <property name="geometry">
+              <rect>
+               <x>440</x>
+               <y>10</y>
+               <width>151</width>
+               <height>20</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_numero">
+             <property name="geometry">
+              <rect>
+               <x>650</x>
+               <y>10</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_bairro">
+             <property name="geometry">
+              <rect>
+               <x>40</x>
+               <y>40</y>
+               <width>141</width>
+               <height>20</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_municipio">
+             <property name="geometry">
+              <rect>
+               <x>250</x>
+               <y>40</y>
+               <width>121</width>
+               <height>20</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_cep">
+             <property name="geometry">
+              <rect>
+               <x>620</x>
+               <y>40</y>
+               <width>101</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="inputMask">
+              <string>99999-999</string>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="txt_estado">
+             <property name="geometry">
+              <rect>
+               <x>420</x>
+               <y>40</y>
+               <width>151</width>
+               <height>20</height>
+              </rect>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget" native="true">
+         <widget class="QTableWidget" name="tb_clientes">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>10</y>
+            <width>741</width>
+            <height>201</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Nome</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>New Column</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sexo</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Telefone Fixo</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Telefone Movel</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>CEP</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Logradouro</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Complemento</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Numero</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>New Column</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Municipio</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>New Column</string>
+           </property>
+          </column>
+         </widget>
+         <widget class="QWidget" name="widget_7" native="true">
+          <property name="geometry">
+           <rect>
+            <x>4</x>
+            <y>220</y>
+            <width>741</width>
+            <height>41</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>Salvar</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="text">
+              <string>Remover</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_4">
+             <property name="text">
+              <string>Limpar</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_3">
+             <property name="text">
+              <string>Atualizar</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
