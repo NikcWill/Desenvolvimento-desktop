@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
     QHeaderView, QLabel, QLineEdit, QMainWindow,
     QPushButton, QRadioButton, QSizePolicy, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget)
+    QTableWidgetItem, QVBoxLayout, QWidget, QMessageBox)
 
 from infra.entities.aposta import Aposta
 from infra.repository import aposta_repository
@@ -321,64 +321,42 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Valor ganho", None));
     # retranslateUi
 
-
+        self.pb_apostar.clicked.connect(self.salvar_aposta)
 
     def salvar_aposta(self):
-        db = aposta_repository
+        db = aposta_repository.ApostaRepository
         aposta = Aposta(
-
             nome = self.txt_nome.text(),
-            aposta_cencedor = self.rb_casa.text(),
+            aposta_vencedor = self.rb_casa.text(),
             placar_casa= self.txt_apt_casa.text(),
             placar_visitante= self.txt_apt_visitante.text(),
             valor_aposta = self.txt_valor_aposta.text(),
-            resultado_casa=self.txt_resul_casa.text(),
-            resultado_visitante=self.txt_resul_visitante.text(),
-
-
         )
-
-        if self.btn_salvar.text() == 'Salvar':
-            retorno = db.insert(cliente)
-
-            if retorno == 'ok':
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Information)
-                msg.setWindowTitle('Cadastro Realizado ')
-                msg.setText('Cadastro realizado com sucesso')
-                msg.exec()
-                self.limpar_conteudo()
-
-            elif retorno == 'UNIQUE constraint failed: CLIENTE.CPF':
-
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Critical)
-                msg.setWindowTitle('Erro ao cadastrar')
-                msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
-                msg.exec()
+        print(aposta)
+        retorno = db.insert(aposta)
+        print(retorno)
+        if retorno == 'ok':
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setWindowTitle('Cadastro Realizado ')
+            msg.setText('Cadastro realizado com sucesso')
+            msg.exec()
 
 
-            else:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Critical)
-                msg.setWindowTitle('Erro ao cadastrar ')
-                msg.setText('Erro ao cadastrar verfique os dados inseridos')
-                msg.exec()
-        elif self.btn_salvar.text() == 'Atualizar':
+        elif retorno == 'UNIQUE constraint failed: CLIENTE.CPF':
 
-            retorno = db.update(cliente)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle('Erro ao cadastrar')
+            msg.setText(f'O CPF {self.txt_cpf.text()} já tem cadastro')
+            msg.exec()
 
-            if retorno == 'ok':
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Information)
-                msg.setWindowTitle('Cadastro Atualizado ')
-                msg.setText('Cadastro atualizado com sucesso')
-                msg.exec()
-            else:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Critical)
-                msg.setWindowTitle('Erro ao Atualizar ')
-                msg.setText('Erro ao cadastrar verfique os dados inseridos')
-                msg.exec()
-        self.popular_tabela_cliente()
-        self.txt_cpf.setReadOnly(False)
+
+        else:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle('Erro ao cadastrar ')
+            msg.setText('Erro ao cadastrar verfique os dados inseridos')
+            msg.exec()
+
+

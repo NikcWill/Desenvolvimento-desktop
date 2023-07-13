@@ -6,15 +6,15 @@ class Aposta(Base):
 
     __tablename__ = 'betDB'
 
-    id = Column(Integer(15), autoincrement=True, primary_key=True )
+    id = Column(Integer, autoincrement=True, primary_key=True)
     nome = Column(String(100), nullable=False)
-    aposta_vencedor = Column(Integer(15), nullable=False)
-    placar_casa = Column(Integer(15), nullable=False)
-    placar_visitante = Column(Integer(15), nullable=False)
-    valor_aposta = Column(Float(30), nullable=False)
+    aposta_vencedor = Column(Integer, nullable=False)
+    placar_casa = Column(Integer, nullable=False)
+    placar_visitante = Column(Integer, nullable=False)
+    valor_aposta = Column(Float, nullable=False)
     resultado_casa = Column(String(100), nullable=False)
     resultado_visitante = Column(String(7), nullable=False)
-    valor_ganho = Column(Float(30), nullable=False)
+    valor_ganho = Column(Float, nullable=False)
 
 
     def __repr__(self):
