@@ -302,21 +302,21 @@ class MainWindow (QMainWindow):
         self.popular_tabela_cliente()
 
     def carregar_dados_por_cpf(self, cliente):
-            self.txt_nome.setText(cliente.nome)
-            self.txt_telefone_fixo.setText(cliente.telefone_fixo)
-            self.txt_telefone_celular.setText(cliente.telefone_celular)
-            sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
-            self.cb_sexo.setCurrentIndex(sexo_map.get(cliente.sexo, 0))
-            self.txt_cep.setText(cliente.cep)
-            self.txt_logradouro.setText(cliente.logradouro)
-            self.txt_numero.setText(cliente.numero)
-            self.txt_complemento.setText(cliente.complemento)
-            self.txt_bairro.setText(cliente.bairro)
-            self.txt_municipio.setText(cliente.municipio)
-            self.txt_estado.setText(cliente.estado)
-            self.btn_salvar.setText('Atualizar')
-            self.btn_remover.setVisible(True)
-            self.txt_cpf.setReadOnly(True)
-            self.popular_tabela_cliente()
+        self.txt_nome.setText(cliente.nome)
+        self.txt_telefone_fixo.setText(cliente.telefone_fixo)
+        self.txt_telefone_celular.setText(cliente.telefone_celular)
+        sexo_map = {'não informado': 0, 'Masculino': 1, 'Feminino': 2}
+        self.cb_sexo.setCurrentIndex(sexo_map.get(cliente.sexo, 0))
+        self.txt_cep.setText(cliente.cep)
+        self.txt_logradouro.setText(cliente.logradouro)
+        self.txt_numero.setText(cliente.numero)
+        self.txt_complemento.setText(cliente.complemento)
+        self.txt_bairro.setText(cliente.bairro)
+        self.txt_municipio.setText(cliente.municipio)
+        self.txt_estado.setText(cliente.estado)
+        self.btn_salvar.setText('Atualizar')
+        self.btn_remover.setVisible(True)
+        self.txt_cpf.setReadOnly(True)
+        self.popular_tabela_cliente()
 
 

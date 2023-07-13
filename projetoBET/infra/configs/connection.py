@@ -6,7 +6,7 @@ from infra.configs.base import Base
 class DBConnectionHandler:
     def __init__(self):
         #Dados endereço do banco de dados
-        self.__connectio_string = 'mysql+pymysql://root:Senac2021@localhost:3306/cadastroCliente'
+        self.__connectio_string = 'mysql+pymysql://root:Senac2021@localhost:3306/betDB'
 
         #Instância do engine(gerenciador do banco)
         self.__engine = self.__create_database_engine()
